@@ -11,6 +11,8 @@ my $post_diag;
 
 $modules{$_} = $_ for qw(
   ExtUtils::MakeMaker
+  FFI::Platypus
+  Ref::Util
   Test2::V0
 );
 
