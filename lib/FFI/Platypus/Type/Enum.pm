@@ -178,6 +178,7 @@ sub ffi_custom_type_api_1
 
   my $index = 0;
   my %str_lookup;
+  my %rev_lookup;
   my %int_lookup;
   my $prefix = defined $config{prefix} ? $config{prefix} : '';
   $config{rev} ||= 'str';
@@ -210,10 +211,10 @@ sub ffi_custom_type_api_1
       constant->import($full, $index);
     }
 
-    $DB::single = 1;
     croak("$name declared twice") if exists $str_lookup{$name};
 
     $int_lookup{$index} = $index;
+    $rev_lookup{$index} = $name unless defined $rev_lookup{$index};
     $str_lookup{$name}  = $index++;
   }
 
@@ -232,7 +233,6 @@ sub ffi_custom_type_api_1
 
   unless($config{rev} eq 'int')
   {
-    my %rev_lookup = reverse %str_lookup;
     $type{native_to_perl} = sub {
       exists $rev_lookup{$_[0]}
         ? $rev_lookup{$_[0]}
