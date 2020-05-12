@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}},
 
 {{$NEXT}}
+
+0.02      2020-05-12 05:40:49 -0600
   - It is now an error to specify the same named value
     twice (gh#2)
   - Added maps option (gh#2)
