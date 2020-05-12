@@ -2,8 +2,6 @@ use Test2::V0 -no_srand => 1;
 use FFI::Platypus 1.00;
 use FFI::Platypus::Type::Enum;
 
-=pod
-
 subtest 'default positive enum' => sub {
   my $ffi = FFI::Platypus->new( api => 1 );
 
@@ -29,6 +27,26 @@ subtest 'default positive enum' => sub {
   is($ffi->cast('enum', 'enum1', 2), 2);
   is($ffi->cast('enum', 'enum1', 3), 3);
   is($ffi->cast('enum', 'enum1', 5), 'five');
+};
+
+subtest 'maps' => sub {
+  my $ffi = FFI::Platypus->new( api => 1 );
+
+  my @maps;
+
+  $ffi->load_custom_type('::Enum','enum1', { maps => \@maps },
+    'one',
+    'two',
+    ['four',4],
+    'five',
+    ['repeat', 4],
+  );
+
+  is(\@maps, [
+    { one => 0,   two => 1,   four => 4,   five => 5,  repeat => 4 },
+    { 0 => 'one', 1 => 'two', 4 => 'four', 5 => 'five' },
+  ]);
+
 };
 
 subtest 'default positive uint8' => sub {
@@ -139,8 +157,6 @@ subtest 'make constants with prefix' => sub {
   is(Foo2::FOO_ONE(), 0);
   is(Foo2::FOO_TWO(), 1);
 };
-
-=cut
 
 subtest 'define errors' => sub {
   my $ffi = FFI::Platypus->new( api => 1 );

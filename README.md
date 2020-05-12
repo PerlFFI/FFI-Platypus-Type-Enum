@@ -93,6 +93,17 @@ value to go with your constant.
 
 # OPTIONS
 
+## maps
+
+```perl
+my @maps;
+$ffi->load_custom_type('::Enum', $name, { maps => \@maps }, ... );
+my($str,$int) = @maps;
+```
+
+If set to an empty array reference, this will be filled with the string, integer
+and reverse lookups for the enum.
+
 ## package
 
 ```perl

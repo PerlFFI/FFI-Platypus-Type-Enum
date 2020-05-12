@@ -100,6 +100,15 @@ value to go with your constant.
 
 =head1 OPTIONS
 
+=head2 maps
+
+ my @maps;
+ $ffi->load_custom_type('::Enum', $name, { maps => \@maps }, ... );
+ my($str,$int) = @maps;
+
+If set to an empty array reference, this will be filled with the string, integer
+and reverse lookups for the enum.
+
 =head2 package
 
  $ffi->load_custom_type('::Enum', $name, { package => $package }, ... );
@@ -178,7 +187,6 @@ sub ffi_custom_type_api_1
 
   my $index = 0;
   my %str_lookup;
-  my %rev_lookup;
   my %int_lookup;
   my $prefix = defined $config{prefix} ? $config{prefix} : '';
   $config{rev} ||= 'str';
@@ -213,9 +221,20 @@ sub ffi_custom_type_api_1
 
     croak("$name declared twice") if exists $str_lookup{$name};
 
-    $int_lookup{$index} = $index;
-    $rev_lookup{$index} = $name unless defined $rev_lookup{$index};
+    $int_lookup{$index} = $name unless exists $int_lookup{$index};
     $str_lookup{$name}  = $index++;
+  }
+
+  if(defined $config{maps})
+  {
+    if(is_plain_arrayref $config{maps})
+    {
+      @{ $config{maps} } = (\%str_lookup, \%int_lookup);
+    }
+    else
+    {
+      croak("maps is not an array reference");
+    }
   }
 
   $config{type} ||= 'enum';
@@ -226,7 +245,7 @@ sub ffi_custom_type_api_1
       exists $str_lookup{$_[0]}
         ? $str_lookup{$_[0]}
         : exists $int_lookup{$_[0]}
-          ? $int_lookup{$_[0]}
+          ? $_[0]
           : croak("illegal enum value $_[0]");
     },
   );
@@ -234,8 +253,8 @@ sub ffi_custom_type_api_1
   unless($config{rev} eq 'int')
   {
     $type{native_to_perl} = sub {
-      exists $rev_lookup{$_[0]}
-        ? $rev_lookup{$_[0]}
+      exists $int_lookup{$_[0]}
+        ? $int_lookup{$_[0]}
         : $_[0];
     }
   }
