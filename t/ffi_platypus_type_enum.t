@@ -2,6 +2,8 @@ use Test2::V0 -no_srand => 1;
 use FFI::Platypus 1.00;
 use FFI::Platypus::Type::Enum;
 
+=pod
+
 subtest 'default positive enum' => sub {
   my $ffi = FFI::Platypus->new( api => 1 );
 
@@ -138,6 +140,8 @@ subtest 'make constants with prefix' => sub {
   is(Foo2::FOO_TWO(), 1);
 };
 
+=cut
+
 subtest 'define errors' => sub {
   my $ffi = FFI::Platypus->new( api => 1 );
 
@@ -149,6 +153,11 @@ subtest 'define errors' => sub {
   is(
     dies { $ffi->load_custom_type('::Enum','enum1', sub {}) },
     match qr/not a array ref or scalar: CODE/,
+  );
+
+  is(
+    dies { $ffi->load_custom_type('::Enum','enum1', 'one','one') },
+    match qr/one declared twice/,
   );
 };
 

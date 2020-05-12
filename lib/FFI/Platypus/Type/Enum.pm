@@ -210,6 +210,9 @@ sub ffi_custom_type_api_1
       constant->import($full, $index);
     }
 
+    $DB::single = 1;
+    croak("$name declared twice") if exists $str_lookup{$name};
+
     $int_lookup{$index} = $index;
     $str_lookup{$name}  = $index++;
   }
@@ -219,9 +222,9 @@ sub ffi_custom_type_api_1
   my %type = (
     native_type    => $config{type},
     perl_to_native => sub {
-      defined $str_lookup{$_[0]}
+      exists $str_lookup{$_[0]}
         ? $str_lookup{$_[0]}
-        : defined $int_lookup{$_[0]}
+        : exists $int_lookup{$_[0]}
           ? $int_lookup{$_[0]}
           : croak("illegal enum value $_[0]");
     },
@@ -231,7 +234,7 @@ sub ffi_custom_type_api_1
   {
     my %rev_lookup = reverse %str_lookup;
     $type{native_to_perl} = sub {
-      defined $rev_lookup{$_[0]}
+      exists $rev_lookup{$_[0]}
         ? $rev_lookup{$_[0]}
         : $_[0];
     }
