@@ -14,6 +14,7 @@ $modules{$_} = $_ for qw(
   FFI::Platypus
   Ref::Util
   Test2::V0
+  constant
 );
 
 
