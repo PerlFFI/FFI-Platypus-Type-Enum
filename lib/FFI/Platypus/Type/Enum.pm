@@ -2,12 +2,15 @@ package FFI::Platypus::Type::Enum;
 
 use strict;
 use warnings;
+use constant 1.32 ();
 use 5.008001;
 use Ref::Util qw( is_plain_arrayref is_plain_hashref is_ref );
 use Carp qw( croak );
 
 # ABSTRACT: Custom platypus type for dealing with C enumerated types
 # VERSION
+
+our @CARP_NOT = qw( FFI::Platypus );
 
 sub ffi_custom_type_api_1
 {
@@ -19,7 +22,7 @@ sub ffi_custom_type_api_1
   my $index = 0;
   my %str_lookup;
   my %int_lookup;
-  $config{prefix} = '' unless defined $config{prefix};
+  my $prefix = defined $config{prefix} ? $config{prefix} : '';
   $config{rev} ||= 'str';
   ($config{rev} =~ /^(int|str)$/) or croak("rev must be either 'int', or 'str'");
 
@@ -44,7 +47,13 @@ sub ffi_custom_type_api_1
       $config{type} ||= 'senum';
     }
 
-    $int_lookup{$index} = 1;
+    if(my $package = $config{package})
+    {
+      my $full = join '::', $package, $prefix . uc($name);
+      constant->import($full, $index);
+    }
+
+    $int_lookup{$index} = $index;
     $str_lookup{$name}  = $index++;
   }
 
@@ -61,15 +70,17 @@ sub ffi_custom_type_api_1
     },
   );
 
-  $type{native_to_perl} = sub {
-    defined $str_lookup{$_[0]}
-      ? $str_lookup{$_[0]}
-      : $_[0];
-  } unless $config{rev} eq 'int';
+  unless($config{rev} eq 'int')
+  {
+    my %rev_lookup = reverse %str_lookup;
+    $type{native_to_perl} = sub {
+      defined $rev_lookup{$_[0]}
+        ? $rev_lookup{$_[0]}
+        : $_[0];
+    }
+  }
 
   \%type;
 }
 
 1;
-
-
