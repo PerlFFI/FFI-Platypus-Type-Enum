@@ -93,21 +93,28 @@ Perl.
 In both modes, if you attempt to pass in a value that isn't one of the possible
 enum values, an exception will be thrown.
 
+=head1 OPTIONS
+
+The general form of the custom type load is:
+
+ $ffi->load_custom_type('::Enum', $name, \%options, @values);
+ $ffi->load_custom_type('::Enum', $name, @values);
+
 The enumerated values are specified as a list of strings and array references.
 For strings the constant value starts at zero (0) and increases by one for each
 possible value.  You can use an array reference to indicate an alternate integer
 value to go with your constant.
 
-=head1 OPTIONS
+Options may be passed in as a hash reference after the type name.
 
 =head2 maps
 
  my @maps;
  $ffi->load_custom_type('::Enum', $name, { maps => \@maps }, ... );
- my($str,$int) = @maps;
+ my($str,$int,$type) = @maps;
 
 If set to an empty array reference, this will be filled with the string, integer
-and reverse lookups for the enum.
+and native type for the enum.
 
 =head2 package
 
@@ -225,19 +232,19 @@ sub ffi_custom_type_api_1
     $str_lookup{$name}  = $index++;
   }
 
+  $config{type} ||= 'enum';
+
   if(defined $config{maps})
   {
     if(is_plain_arrayref $config{maps})
     {
-      @{ $config{maps} } = (\%str_lookup, \%int_lookup);
+      @{ $config{maps} } = (\%str_lookup, \%int_lookup, $config{type});
     }
     else
     {
       croak("maps is not an array reference");
     }
   }
-
-  $config{type} ||= 'enum';
 
   my %type = (
     native_type    => $config{type},

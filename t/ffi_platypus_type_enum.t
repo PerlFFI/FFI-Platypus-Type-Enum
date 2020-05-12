@@ -45,6 +45,7 @@ subtest 'maps' => sub {
   is(\@maps, [
     { one => 0,   two => 1,   four => 4,   five => 5,  repeat => 4 },
     { 0 => 'one', 1 => 'two', 4 => 'four', 5 => 'five' },
+    'enum',
   ]);
 
 };
