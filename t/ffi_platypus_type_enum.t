@@ -144,7 +144,7 @@ subtest 'make constants' => sub {
     'one',
     'two',
     ['three',3, alias => [ 'xyz', 'abc' ]],
-    ['next',undef, alias => ['foo','bar']],
+    ['next', alias => ['foo','bar']],
   );
 
   is(Foo1::ONE(), 0);
