@@ -202,6 +202,9 @@ sub ffi_custom_type_api_1
   foreach my $value (@values)
   {
     my $name;
+    if( ref $value eq 'CODE' ) {
+      $value =  $value->();
+    }
     if(is_plain_arrayref $value)
     {
       ($name,$index) = @$value;
