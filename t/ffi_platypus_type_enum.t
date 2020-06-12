@@ -168,11 +168,6 @@ subtest 'define errors' => sub {
   );
 
   is(
-    dies { $ffi->load_custom_type('::Enum','enum1', sub {}) },
-    match qr/not a array ref or scalar: CODE/,
-  );
-
-  is(
     dies { $ffi->load_custom_type('::Enum','enum1', 'one','one') },
     match qr/one declared twice/,
   );
