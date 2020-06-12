@@ -207,9 +207,14 @@ sub ffi_custom_type_api_1
     if(is_plain_arrayref $value)
     {
       my %opt;
-      my $v;
-      ($name,$v,%opt) = @$value;
-      $index = $v if defined $v;
+      if(@$value % 2)
+      {
+        ($name,%opt) = @$value;
+      }
+      else
+      {
+        ($name,$index,%opt) = @$value;
+      }
       @aliases = @{ delete $opt{alias} || [] };
       croak("unrecognized options: @{[ sort keys %opt ]}") if %opt;
     }
