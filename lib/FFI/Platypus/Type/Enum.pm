@@ -19,7 +19,7 @@ C:
    BETTER,
    BEST = 12
  } foo_t;
-
+ 
  foo_t
  f(foo_t arg)
  {
@@ -30,18 +30,18 @@ Perl with strings:
 
  use FFI::Platypus 1.00;
  my $ffi = FFI::Platypus->new( api => 1 );
-
+ 
  $ffi->load_custom_type('::Enum', 'foo_t',
    'default',
    'better',
    ['best' => 12],
  );
-
+ 
  $ffi->attach( f => ['foo_t'] => 'foo_t' );
-
+ 
  f("default") eq 'default';  # true
  f("default") eq 'better';   # false
-
+ 
  print f("default"), "\n";   # default
  print f("better"),  "\n";   # better
  print f("best"),    "\n";   # best
@@ -50,19 +50,19 @@ Perl with constants:
 
  use FFI::Platypus 1.00;
  my $ffi = FFI::Platypus->new( api => 1 );
-
- $ffi->load_custom_type('::Enum', 'foo_t', 
+ 
+ $ffi->load_custom_type('::Enum', 'foo_t',
    { ret => 'int', package => 'Foo', prefix => 'FOO_' },
    'default',
    'better',
    ['best' => 12],
  );
-
+ 
  $ffi->attach( f => ['foo_t'] => 'foo_t' );
-
+ 
  f(Foo::FOO_DEFAULT) == Foo::FOO_DEFAULT;   # true
  f(Foo::FOO_DEFAULT) == Foo::FOO_BETTER;    # false
- 
+
 
 =head1 DESCRIPTION
 
@@ -101,13 +101,67 @@ The general form of the custom type load is:
  $ffi->load_custom_type('::Enum', $name, @values);
 
 The enumerated values are specified as a list of strings and array references.
+
+=over 4
+
+=item string
+
+ $ffi->load_custom_type('::Enum', $name, $string1, $string2, ... );
+
 For strings the constant value starts at zero (0) and increases by one for each
-possible value.  You can use an array reference to indicate an alternate integer
-value to go with your constant.
+possible value.
 
-Options may be passed in as a hash reference after the type name.
+=item array reference
 
-=head2 maps
+ $ffi->load_custom_type('::Enum', $name, [ $value_name, $value, %options ]);
+ $ffi->load_custom_type('::Enum', $name, [ $value_name, %options ]);
+
+You can use an array reference to include an explicit integer value, rather
+than using the implicit incremented value.  You can also use the array
+reference for value options.  If the value isn't included (that is if
+there are an odd number of values in the array reference), then the
+implicit incremented value will be used.
+
+Value options:
+
+=over 4
+
+=item alias
+
+ $ffi->load_custom_type('::Enum, $name, [ $value_name, $value, alias => \@aliases ]);
+ $ffi->load_custom_type('::Enum, $name, [ $value_name, alias => \@aliases ]);
+
+The C<alias> option lets you specify value aliases.  For example, suppose you have
+an enum definition like:
+
+ enum {
+   FOO,
+   BAR,
+   BAZ=BAR,
+   ABC,
+   XYZ
+ } foo_t;
+
+The Perl definition would be:
+
+ $ffi->load_custom_type('::Enum', 'foo_t',
+   'foo',
+   ['bar', alias => ['baz']],
+   'abc',
+   'xyz',
+ );
+
+=back
+
+=back
+
+Type options may be passed in as a hash reference after the type name.
+
+Type options:
+
+=over 4
+
+=item maps
 
  my @maps;
  $ffi->load_custom_type('::Enum', $name, { maps => \@maps }, ... );
@@ -116,7 +170,7 @@ Options may be passed in as a hash reference after the type name.
 If set to an empty array reference, this will be filled with the string, integer
 and native type for the enum.
 
-=head2 package
+=item package
 
  $ffi->load_custom_type('::Enum', $name, { package => $package }, ... );
 
@@ -124,14 +178,14 @@ This option specifies the Perl package where constants will be defined.
 If not specified, then not constants will be generated.  As per the usual
 convention, the constants will be the upper case of the value names.
 
-=head2 prefix
+=item prefix
 
  $ffi->load_custom_type('::Enum', $name, { prefix => $prefix }, ... );
 
 This specifies an optional prefix to give each constant.  If not specified,
 then no prefix will be used.
 
-=head2 rev
+=item rev
 
  $ffi->load_custom_type('::Enum', $name, { prefix => 'int' }, ... );
  $ffi->load_custom_type('::Enum', $name, { prefix => 'str' }, ... );
@@ -140,7 +194,7 @@ This specifies what should be returned for C functions that return the
 enumerated type.  For strings, use C<str>, and for integer constants
 use C<int>.
 
-=head2 type
+=item type
 
  $ffi->load_custom_type('::Enum', $name, { type => $type }, ... );
 
@@ -170,6 +224,8 @@ Perl:
    'better',
    [best => 12],
  );
+
+=back
 
 =head1 SEE ALSO
 
