@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}},
 
 {{$NEXT}}
+  - Add value aliases (gh#6)
 
 0.03      2020-05-12 09:26:39 -0600
   - Fixed unclear documentation. (gh#3)

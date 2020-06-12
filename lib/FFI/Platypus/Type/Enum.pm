@@ -202,9 +202,16 @@ sub ffi_custom_type_api_1
   foreach my $value (@values)
   {
     my $name;
+    my @aliases;
+
     if(is_plain_arrayref $value)
     {
-      ($name,$index) = @$value;
+      my %opt;
+      my $v;
+      ($name,$v,%opt) = @$value;
+      $index = $v if defined $v;
+      @aliases = @{ delete $opt{alias} || [] };
+      croak("unrecognized options: @{[ sort keys %opt ]}") if %opt;
     }
     elsif(!is_ref $value)
     {
@@ -222,13 +229,17 @@ sub ffi_custom_type_api_1
 
     if(my $package = $config{package})
     {
-      my $full = join '::', $package, $prefix . uc($name);
-      constant->import($full, $index);
+      foreach my $name ($name,@aliases)
+      {
+        my $full = join '::', $package, $prefix . uc($name);
+        constant->import($full, $index);
+      }
     }
 
     croak("$name declared twice") if exists $str_lookup{$name};
 
     $int_lookup{$index} = $name unless exists $int_lookup{$index};
+    $str_lookup{$_}     = $index for @aliases;
     $str_lookup{$name}  = $index++;
   }
 
