@@ -1,4 +1,4 @@
-# FFI::Platypus::Type::Enum [![Build Status](https://travis-ci.org/Perl5-FFI/FFI-Platypus-Type-Enum.svg)](http://travis-ci.org/Perl5-FFI/FFI-Platypus-Type-Enum)
+# FFI::Platypus::Type::Enum [![Build Status](https://travis-ci.org/PerlFFI/FFI-Platypus-Type-Enum.svg)](http://travis-ci.org/PerlFFI/FFI-Platypus-Type-Enum)
 
 Custom platypus type for dealing with C enumerated types
 
