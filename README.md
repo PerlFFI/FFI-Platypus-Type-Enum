@@ -49,7 +49,7 @@ use FFI::Platypus 1.00;
 my $ffi = FFI::Platypus->new( api => 1 );
 
 $ffi->load_custom_type('::Enum', 'foo_t',
-  { ret => 'int', package => 'Foo', prefix => 'FOO_' },
+  { rev => 'int', package => 'Foo', prefix => 'FOO_' },
   'default',
   'better',
   ['best' => 12],
@@ -189,13 +189,15 @@ Type options:
 - rev
 
     ```perl
-    $ffi->load_custom_type('::Enum', $name, { prefix => 'int' }, ... );
-    $ffi->load_custom_type('::Enum', $name, { prefix => 'str' }, ... );
+    $ffi->load_custom_type('::Enum', $name, { rev => 'int' }, ... );
+    $ffi->load_custom_type('::Enum', $name, { rev => 'str' }, ... );
     ```
 
     This specifies what should be returned for C functions that return the
     enumerated type.  For strings, use `str`, and for integer constants
     use `int`.
+
+    (`rev` is short for "reverse")
 
 - type
 
