@@ -216,13 +216,19 @@ Type options:
 
     C:
 
-    ```
+    ```perl
     enum {
       DEFAULT,
       BETTER,
       BEST = 12
     } foo_enum;
     typedef uint8_t foo_t;
+
+    /*
+     * you are expected to use the constants from foo_enum,
+     * but the signature actually uses a uint8_t
+     */
+    void f(foo_t);
     ```
 
     Perl:
@@ -234,6 +240,8 @@ Type options:
       'better',
       [best => 12],
     );
+
+    $ffi->attach( f => [ 'foo_t' ] => 'void' );
     ```
 
 # SEE ALSO
