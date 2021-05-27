@@ -196,7 +196,6 @@ subtest 'define errors' => sub {
 
 sub dv
 {
-  $DB::single = 1;
   [ isdual $_[0] ? (int($_[0]), "$_[0]") : $_[0] ];
 }
 
