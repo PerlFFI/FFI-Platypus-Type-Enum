@@ -189,15 +189,21 @@ Type options:
 - rev
 
     ```perl
-    $ffi->load_custom_type('::Enum', $name, { rev => 'int' }, ... );
-    $ffi->load_custom_type('::Enum', $name, { rev => 'str' }, ... );
+    $ffi->load_custom_type('::Enum', $name, { rev => 'int'     }, ... );
+    $ffi->load_custom_type('::Enum', $name, { rev => 'str'     }, ... );
+    $ffi->load_custom_type('::Enum', $name, { rev => 'dualvar' }, ... );  # version 0.05
     ```
 
     This specifies what should be returned for C functions that return the
-    enumerated type.  For strings, use `str`, and for integer constants
-    use `int`.
+    enumerated type.  For strings, use `str`, and for integer constants use
+    `int`.
 
     (`rev` is short for "reverse")
+
+    \[version 0.05\]
+
+    As of version 0.05, dualvar can be specified to return a string/integer
+    dualvar.
 
 - type
 
