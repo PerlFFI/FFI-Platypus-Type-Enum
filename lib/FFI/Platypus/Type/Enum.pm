@@ -173,11 +173,17 @@ and native type for the enum.
 
 =item package
 
- $ffi->load_custom_type('::Enum', $name, { package => $package }, ... );
+ $ffi->load_custom_type('::Enum', $name, { package => $package  }, ... );
+ $ffi->load_custom_type('::Enum', $name, { package => \@package }, ... );  # version 0.05
 
 This option specifies the Perl package where constants will be defined.
 If not specified, then not constants will be generated.  As per the usual
 convention, the constants will be the upper case of the value names.
+
+[version 0.05]
+
+As of version 0.05, you can specify multiple packages to create the constants via
+an array reference.
 
 =item prefix
 
@@ -305,12 +311,15 @@ sub ffi_custom_type_api_1
       $config{type} ||= 'senum';
     }
 
-    if(my $package = $config{package})
+    if(my $packages = $config{package})
     {
-      foreach my $name ($name,@aliases)
+      foreach my $package (is_plain_arrayref $packages ? @$packages : $packages)
       {
-        my $full = join '::', $package, $prefix . uc($name);
-        constant->import($full, $index);
+        foreach my $name ($name,@aliases)
+        {
+          my $full = join '::', $package, $prefix . uc($name);
+          constant->import($full, $index);
+        }
       }
     }
 

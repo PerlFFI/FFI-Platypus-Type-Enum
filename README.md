@@ -170,12 +170,18 @@ Type options:
 - package
 
     ```perl
-    $ffi->load_custom_type('::Enum', $name, { package => $package }, ... );
+    $ffi->load_custom_type('::Enum', $name, { package => $package  }, ... );
+    $ffi->load_custom_type('::Enum', $name, { package => \@package }, ... );  # version 0.05
     ```
 
     This option specifies the Perl package where constants will be defined.
     If not specified, then not constants will be generated.  As per the usual
     convention, the constants will be the upper case of the value names.
+
+    \[version 0.05\]
+
+    As of version 0.05, you can specify multiple packages to create the constants via
+    an array reference.
 
 - prefix
 

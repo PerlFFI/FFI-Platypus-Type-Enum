@@ -156,6 +156,16 @@ subtest 'make constants' => sub {
   is(Foo1::NEXT(), 4);
   is(Foo1::FOO(), 4);
   is(Foo1::BAR(), 4);
+
+  $ffi->load_custom_type('::Enum', 'enum2', { package => ['Foo1::Bar1','Foo1::Bar2'] },
+    'one',
+    'two',
+  );
+
+  is(Foo1::Bar1::ONE(), 0);
+  is(Foo1::Bar2::ONE(), 0);
+  is(Foo1::Bar1::TWO(), 1);
+  is(Foo1::Bar2::TWO(), 1);
 };
 
 subtest 'make constants with prefix' => sub {
