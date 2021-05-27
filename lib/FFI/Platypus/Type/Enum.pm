@@ -357,7 +357,6 @@ sub ffi_custom_type_api_1
   elsif($config{rev} eq 'dualvar')
   {
     $type{native_to_perl} = sub {
-      $DB::single = 1;
       exists $int_lookup{$_[0]}
         ? dualvar( $_[0], $int_lookup{$_[0]} )
         : $_[0];
