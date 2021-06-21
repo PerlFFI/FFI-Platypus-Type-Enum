@@ -175,8 +175,9 @@ Type options:
     ```
 
     This option specifies the Perl package where constants will be defined.
-    If not specified, then not constants will be generated.  As per the usual
-    convention, the constants will be the upper case of the value names.
+    If not specified, then no constants will be generated.  Unless otherwise
+    specified (see 'casing' below), the constants will be the upper case of
+    the value names as per the usual convention.
 
     \[version 0.05\]
 
@@ -255,6 +256,21 @@ Type options:
 
     $ffi->attach( f => [ 'foo_t' ] => 'void' );
     ```
+
+- casing
+
+    \[version 0.06\]
+
+    ```perl
+    $ffi->load_custom_type('::Enum', $name, { casing => 'upper' }, ... );
+    $ffi->load_custom_type('::Enum', $name, { casing => 'keep'  }, ... );
+    ```
+
+    When in constant mode, all constant names are by default generated in
+    uppercase as is conventional.  However, some libraries will on occasion
+    define constant names in mixed case.  For these cases, the `casing` option,
+    added in version 0.06, can be set to `keep` to prevent the names from being
+    modified.  The only other allowed value is `upper`, which is the default.
 
 # SEE ALSO
 
