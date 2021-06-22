@@ -279,7 +279,11 @@ Type options:
 
 # AUTHOR
 
-Graham Ollis <plicease@cpan.org>
+Author: Graham Ollis <plicease@cpan.org>
+
+Contributors:
+
+José Joaquín Atria (JJATRIA)
 
 # COPYRIGHT AND LICENSE
 
