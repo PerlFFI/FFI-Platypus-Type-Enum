@@ -1,8 +1,10 @@
 Revision history for {{$dist->name}}},
 
 {{$NEXT}}
+  - Retroactively added missing entry for 0.06 in this change-log.
 
 0.06      2021-06-21 18:19:51 -0600
+  - Add support for mixed-case constants (gh#18)
 
 0.05      2021-05-26 20:53:20 -0600
   - Add rev => 'dualvar' option (gh#15)
