@@ -1,4 +1,4 @@
-Revision history for {{$dist->name}}},
+Revision history for {{$dist->name}}
 
 {{$NEXT}}
   - Retroactively added missing entry for 0.06 in this change-log.
