@@ -1,4 +1,4 @@
-# FFI::Platypus::Type::Enum ![linux](https://github.com/PerlFFI/FFI-Platypus-Type-Enum/workflows/linux/badge.svg)
+# FFI::Platypus::Type::Enum ![static](https://github.com/PerlFFI/FFI-Platypus-Type-Enum/workflows/static/badge.svg) ![linux](https://github.com/PerlFFI/FFI-Platypus-Type-Enum/workflows/linux/badge.svg)
 
 Custom platypus type for dealing with C enumerated types
 
@@ -287,7 +287,7 @@ José Joaquín Atria (JJATRIA)
 
 # COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2020 by Graham Ollis.
+This software is copyright (c) 2020-2024 by Graham Ollis.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
