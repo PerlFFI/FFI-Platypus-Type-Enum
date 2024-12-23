@@ -2,4 +2,7 @@ FFI-Platypus-Type-Enum-*
 /.build/
 *.swp
 
-
+/FFI-Platypus-Type-Enum-*
+/.build
+*.old
+*.orig
